@@ -39,14 +39,14 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
     return regex.test(email);
   };
 
-  const infoFile = (event) => {
+  const infoFile = async (event) => {
     const file = event.target.files[0];
     if (file !== null) {
       setFileExiste(true);
-      setFileDetails(() => ({
+      await setFileDetails(() => ({
         fileName: file.name,
         fileExt: file.name.split(".").pop(),
-        filePath: subjet,
+        filePath: cleanSubject(subjet),
         mimeType: file.type,
         isPublic: false,
       }));
@@ -122,9 +122,8 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
         throw new Error("error");
       }
       const uploadedFileInfo = await draivUpload.json();
-      
       setAttachments({
-        filename: fileDetails.filename,
+        filename: fileDetails.fileName,
         url: uploadedFileInfo.url,
       });
 
@@ -133,7 +132,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
     }
   };
 
-  const enviarCorreo = (event) => {
+  const enviarCorreo = async (event) => {
     event.preventDefault();
     setError("");
 
@@ -159,7 +158,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
     }
 
     if (fileExiste) {
-      folderDrive();
+      await folderDrive();
     }
 
     const dataEmail = { token, systemId, from, to, subjet, body, attachments };
