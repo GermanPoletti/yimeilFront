@@ -132,14 +132,7 @@ a .bienvenida {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+
 
 .capa {
   flex: 1;
@@ -150,3 +143,28 @@ a .bienvenida {
   border-left: 1px solid #ccc;
 }
 
+/* Todo lo relacionado a la barra lateral */
+
+.logo-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-text{
+  padding-top: 10px;
+}
+
+.sidebar .btnLogOut{
+  margin-top: auto;
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

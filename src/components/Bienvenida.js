@@ -5,11 +5,8 @@ const Bienvenida = ({ token, userId }) => {
   const [cargando, setCargando] = useState(true);
 
   const fetchUserData = async () => {
-
-  const baseUrlUser = `https://poo2024.unsada.edu.ar/yimeil/user/${userId}`;
+    const baseUrlUser = `https://poo2024.unsada.edu.ar/cuentas/user/${userId}`;
     const params = new URLSearchParams({ token: token });
-    // bien 
-    console.log("Fetching user data with:", baseUrlUser, params.toString()); 
 
     try {
       const response = await fetch(`${baseUrlUser}?${params.toString()}`, {
@@ -18,13 +15,13 @@ const Bienvenida = ({ token, userId }) => {
           "Content-Type": "application/json",
         },
       });
-     
+
       if (!response.ok) {
         throw new Error("Error al obtener la información del usuario.");
       }
 
-    const data = await response.json();
-      console.log("User data received:", data); 
+      const data = await response.json();
+      
 
       setUsuario(data);
     } catch (error) {
@@ -35,8 +32,6 @@ const Bienvenida = ({ token, userId }) => {
   };
 
   useEffect(() => {
-    // bien 
-    console.log("userId:", userId, "token:", token); 
     if (userId && token) {
       fetchUserData();
     } else {
@@ -44,12 +39,6 @@ const Bienvenida = ({ token, userId }) => {
     }
   }, [userId, token]);
 
-
-
-
-
-
-  
   return (
     <div className="capa bienvenida">
       <img src="/LogoY.png" alt="Logo YIMEIL" className="logo-img" />
@@ -58,7 +47,9 @@ const Bienvenida = ({ token, userId }) => {
         <p>Cargando información del usuario...</p>
       ) : usuario ? (
         <div>
-          <p>Hola, {usuario.firstName} {usuario.lastName} ({usuario.username})</p>
+          <p>
+            Hola, {usuario.firstName} {usuario.lastName} ({usuario.username})
+          </p>
         </div>
       ) : (
         <p>Error al cargar la información del usuario.</p>
@@ -68,14 +59,3 @@ const Bienvenida = ({ token, userId }) => {
 };
 
 export default Bienvenida;
-/*import React from 'react';
-
-const Bienvenida = () => (
-    <div className="capa bienvenida">
-        <img src="/YIMEIL.png" alt="Logo YIMEIL" className="logo-img" />
-        <h2>¡Bienvenidos a YIMEIL!</h2>
-        <p>Inicia sesión para continuar</p>
-    </div>
-);
-
-export default Bienvenida;*/
