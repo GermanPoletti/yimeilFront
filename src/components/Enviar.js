@@ -43,7 +43,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
     const file = event.target.files[0];
     if (file !== null) {
       setFileExiste(true);
-      await setFileDetails(() => ({
+      setFileDetails(() => ({
         fileName: file.name,
         fileExt: file.name.split(".").pop(),
         filePath: cleanSubject(subjet),
