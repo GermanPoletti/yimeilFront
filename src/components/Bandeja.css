@@ -1,0 +1,41 @@
+.bandeja {
+    padding: 20px;
+    background-color: #f4f7f6;
+  }
+  
+  .correos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .correo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .correo-item:hover {
+    background-color: #f1f1f1;
+  }
+
+  .correo-remitente {
+    font-size: 14px;
+    color: #202124;
+    font-weight: 500;
+    flex: 2;
+  }
+  
+  .correo-asunto {
+    font-size: 14px;
+    color: #202124;
+    flex: 4;
+  }
+  
+  

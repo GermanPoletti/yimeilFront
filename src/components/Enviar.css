@@ -1,8 +1,28 @@
+.EnviarContenedor{
+  
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    height: auto; 
+    background-color: #f0f4f8;
+    font-family: 'Arial', sans-serif;
+    padding: 30px;
+    border: 2px solid #ccc;
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 0 auto; 
+    box-sizing: border-box; 
+  
+}
+
 .formEnviar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 300px;
+    width: 70%;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -40,5 +60,19 @@
   
   .btnEnviar:hover {
     background-color: #45a049;
+  }
+
+  .contenedorArchivo{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .contenedorCheckbox{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    white-space: nowrap;
   }
   

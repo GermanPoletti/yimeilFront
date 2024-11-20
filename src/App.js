@@ -9,10 +9,37 @@ import "./App.css";
 
 const App = () => {
   const [token, setToken] = useState(null);
-  const [vistaActiva, setVistaActiva] = useState("bienvenida");
+  const [userId, setUserId] = useState(null);
+  const [vistaActiva, setVistaActiva] = useState("login"); //antes  bienvenida
   const [mensajeExito, setMensajeExito] = useState("");
   const [correoSeleccionado, setCorreoSeleccionado] = useState(null);
   const [authData, setAuthData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  
+  //funcion para tener los datos del usuario y poder pasarlos posteriormente a otros componentes
+  const fetchUserData = async (idUsuario, token) => {
+    const baseUrlUser = `https://poo2024.unsada.edu.ar/cuentas/user/${idUsuario}`;
+    const params = new URLSearchParams({ token: token });
+
+    try {
+      const response = await fetch(`${baseUrlUser}?${params.toString()}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al obtener la información del usuario.");
+      }
+
+      const userData = await response.json();
+      setUserData(userData);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } 
+  };
+
 
   const seleccionarCorreo = (correo) => {
     setCorreoSeleccionado(correo);
@@ -20,16 +47,20 @@ const App = () => {
 
   useEffect(() => {
     if (correoSeleccionado) {
-      console.log(correoSeleccionado);
       setVistaActiva("correo");
     }
   }, [correoSeleccionado]);
 
+
   const manejarToken = (data) => {
     setAuthData(data);
     setToken(data.token);
-    console.log(data);
-    setVistaActiva("bandeja");
+    setUserId(data.userId);
+    setVistaActiva("bienvenida");
+    setTimeout(() => {
+      setVistaActiva("bandeja");
+    }, 3000);
+    fetchUserData(data.userId, data.token);
   };
 
   const manejarData = (data) => {
@@ -38,15 +69,18 @@ const App = () => {
 
   const cerrarSesion = () => {
     setToken(null);
-    setVistaActiva("bienvenida");
+    localStorage.setItem("data", null);
+    setVistaActiva("login");
   };
 
   const cambiarVista = (vista) => {
     setVistaActiva(vista);
   };
 
+  
+
   const handleEnviarCorreo = async (emailData) => {
-    console.log(emailData);
+    
 
     try {
       const response = await fetch(
@@ -88,7 +122,9 @@ const App = () => {
         cerrarSesion={cerrarSesion}
       />
       <div className="main-content">
-        {vistaActiva === "bienvenida" && <Bienvenida />}
+        {vistaActiva === "bienvenida" && token && userId && (
+          <Bienvenida userId={userId} token={token} />
+        )}
         {vistaActiva === "login" && <Login manejarToken={manejarToken} />}
         {vistaActiva === "bandeja" && token && (
           <Bandeja token={token} seleccionarCorreo={seleccionarCorreo} />
@@ -97,7 +133,7 @@ const App = () => {
           <Correo correo={correoSeleccionado} />
         )}
         {vistaActiva === "enviar" && token && (
-          <Enviar handleEnviarCorreo={handleEnviarCorreo} authData={authData} />
+          <Enviar handleEnviarCorreo={handleEnviarCorreo} authData={authData} userData={userData} />
         )}
         {mensajeExito && <div className="exito">{mensajeExito}</div>}
       </div>
