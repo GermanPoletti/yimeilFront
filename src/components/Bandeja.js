@@ -13,16 +13,16 @@ const Bandeja = ({ token, seleccionarCorreo }) => {
   useEffect(() => {
     const fetchCorreos = async () => {
       const baseUrlYimeilGetEmails =
-        "https://poo2024.unsada.edu.ar/yimeil/emails";
+          "https://poo2024.unsada.edu.ar/yimeil/emails";
       try {
         const response = await fetch(
-          `${baseUrlYimeilGetEmails}?${params.toString()}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+            `${baseUrlYimeilGetEmails}?${params.toString()}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
         );
         const data = await response.json();
         setCorreos(data);
@@ -41,13 +41,13 @@ const Bandeja = ({ token, seleccionarCorreo }) => {
     const baseUrlYimeilGetEmails = `https://poo2024.unsada.edu.ar/yimeil/emails/${emailId}`;
     try {
       const response = await fetch(
-        `${baseUrlYimeilGetEmails}?${params.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+          `${baseUrlYimeilGetEmails}?${params.toString()}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
       );
 
       const emailData = await response.json();
@@ -62,29 +62,29 @@ const Bandeja = ({ token, seleccionarCorreo }) => {
 
   const handleClick = (correo) => {
     fetchDataEmail(correo);
-    
+
   };
 
   return (
-    <div className="bandeja">
-      {cargando ? (
-        <p>Cargando correos...</p>
-      ) : (
-        <div className="correos-lista">
-          {correos.map((correo) => (
-            <div
-              key={correo.emailId}
-              className="correo-item"
-              onClick={() => handleClick(correo)}
-            >
-              <div className="correo-remitente">{correo.from}</div>
-              <div className="correo-asunto">{correo.subject}</div>
+      <div className="bandeja">
+        {cargando ? (
+            <p>Cargando correos...</p>
+        ) : (
+            <div className="correos-lista">
+              {correos.map((correo) => (
+                  <div
+                      key={correo.emailId}
+                      className="correo-item"
+                      onClick={() => handleClick(correo)}
+                  >
+                    <div className="correo-remitente">{correo.from}</div>
+                    <div className="correo-asunto">{correo.subject}</div>
 
+                  </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
-    </div>
+        )}
+      </div>
   );
 };
 
