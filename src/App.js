@@ -18,7 +18,7 @@ const App = () => {
   
   //funcion para tener los datos del usuario y poder pasarlos posteriormente a otros componentes
   const fetchUserData = async (idUsuario, token) => {
-    const baseUrlUser = `https://poo2024.unsada.edu.ar/cuentas/user/${idUsuario}`;
+    const baseUrlUser = `https://poo-dev.unsada.edu.ar/cuentas/user/${idUsuario}`;
     const params = new URLSearchParams({ token: token });
 
     try {

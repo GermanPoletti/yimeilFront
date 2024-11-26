@@ -5,7 +5,7 @@ const Bienvenida = ({ token, userId }) => {
   const [cargando, setCargando] = useState(true);
 
   const fetchUserData = async () => {
-    const baseUrlUser = `https://poo2024.unsada.edu.ar/cuentas/user/${userId}`;
+    const baseUrlUser = `https://poo-dev.unsada.edu.ar/cuentas/user/${userId}`;
     const params = new URLSearchParams({ token: token });
 
     try {

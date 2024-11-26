@@ -65,7 +65,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
 
   const folderDrive = async () => {
     const folderPath = `/adjuntos`;
-    const draivFilesUrl = "https://poo2024.unsada.edu.ar/draiv/files";
+    const draivFilesUrl = "https://poo-dev.unsada.edu.ar/draiv/files";
 
     try {
       const folderExiste = await fetch(
@@ -99,7 +99,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const uploadDraiv = async (esCarpeta) => {
     try {
       const draivUpload = await fetch(
-        "https://poo2024.unsada.edu.ar/draiv/files",
+        "https://poo-dev.unsada.edu.ar/draiv/files",
         {
           method: "POST",
           headers: {
