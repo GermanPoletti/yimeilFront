@@ -9,7 +9,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const [to, setTo] = useState([""]);
   const [subjet, setSubjet] = useState("");
   const [body, setBody] = useState("");
-  const [attachments, setAttachments] = useState({ filename: "", url: "" });
+  const [attachments, setAttachments] = useState([{ filename: "", url: "" }]);
   const [fileDetails, setFileDetails] = useState({
     fileName: "",
     fileExt: "",
@@ -22,6 +22,19 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const [fileExiste, setFileExiste] = useState(false);
   const [esPublico, setEsPublico] = useState(false);
   const [error, setError] = useState("");
+
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result.split(",")[1]; // Eliminamos el encabezado
+        resolve(base64String);
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file); // Lee el archivo como Data URL
+    });
+  };
 
   const cambio = (event) => {
     const inputValue = event.target.value;
@@ -42,6 +55,8 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const infoFile = async (event) => {
     const file = event.target.files[0];
     if (file !== null) {
+      const base64Content = await convertToBase64(file);
+  
       setFileExiste(true);
       setFileDetails(() => ({
         fileName: file.name,
@@ -49,6 +64,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
         filePath: cleanSubject(subjet),
         mimeType: file.type,
         isPublic: false,
+        fileContent: base64Content,
       }));
     }
   };
@@ -65,7 +81,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
 
   const folderDrive = async () => {
     const folderPath = `/adjuntos`;
-    const draivFilesUrl = "https://poo2024.unsada.edu.ar/draiv/files";
+    const draivFilesUrl = "http://poo-dev.unsada.edu.ar:8082/draiv/files";
 
     try {
       const folderExiste = await fetch(
@@ -99,24 +115,24 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const uploadDraiv = async (esCarpeta) => {
     try {
       const draivUpload = await fetch(
-          "https://poo2024.unsada.edu.ar/draiv/files",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              token: token,
-              systemId: systemId,
-              isFolder: esCarpeta,
-              filePath: `/adjuntos/${cleanSubject(subjet)}`,
-              fileExt: `${esCarpeta ? "" : fileDetails.fileExt}`,
-              fileName: `${fileDetails.filename}`,
-              mimeType: `${esCarpeta ? "" : fileDetails.mimeType}`,
-              content: `${esCarpeta ? "" : "content aqui"}`,
-              isPublic: esPublico,
-            }),
-          }
+         "http://poo-dev.unsada.edu.ar:8082/draiv/files",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+            systemId: systemId,
+            isFolder: esCarpeta,
+            filePath: `/adjuntos/${cleanSubject(subjet)}`,
+            fileExt: `${esCarpeta ? "" : fileDetails.fileExt}`,
+            fileName: `${fileDetails.filename}`,
+            mimeType: `${esCarpeta ? "" : fileDetails.mimeType}`,
+            content: `${esCarpeta ? "" : fileDetails.content}`,
+            isPublic: esPublico,
+          }),
+        }
       );
       if (!draivUpload.ok) {
         throw new Error("error");

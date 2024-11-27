@@ -18,7 +18,7 @@ const App = () => {
 
   // Función para obtener datos del usuario
   const fetchUserData = async (idUsuario, token) => {
-    const baseUrlUser = `https://poo2024.unsada.edu.ar/cuentas/user/${idUsuario}`;
+    const baseUrlUser = `http://poo-dev.unsada.edu.ar:8088/cuentas/API/user/${idUsuario}`;
     const params = new URLSearchParams({ token: token });
 
     try {
@@ -77,7 +77,8 @@ const App = () => {
 
   const handleEnviarCorreo = async (emailData) => {
     try {
-      await fetch("https://poo2024.unsada.edu.ar/yimeil/emails", {
+      await fetch( "http://poo-dev.unsada.edu.ar:8083/yimeil/emails", 
+        {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
