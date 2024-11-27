@@ -5,7 +5,7 @@ const Bienvenida = ({ token, userId }) => {
   const [cargando, setCargando] = useState(true);
 
   const fetchUserData = async () => {
-    const baseUrlUser = `https://poo2024.unsada.edu.ar/cuentas/user/${userId}`;
+    const baseUrlUser = `http://poo-dev.unsada.edu.ar:8088/cuentas/API/user/${userId}`;
     const params = new URLSearchParams({ token: token });
 
     try {
@@ -21,7 +21,7 @@ const Bienvenida = ({ token, userId }) => {
       }
 
       const data = await response.json();
-      
+
 
       setUsuario(data);
     } catch (error) {
@@ -40,21 +40,21 @@ const Bienvenida = ({ token, userId }) => {
   }, [userId, token]);
 
   return (
-    <div className="capa bienvenida">
-      <img src="/LogoY.png" alt="Logo YIMEIL" className="logo-img" />
-      <h2>¡Bienvenidos a YIMEIL!</h2>
-      {cargando ? (
-        <p>Cargando información del usuario...</p>
-      ) : usuario ? (
-        <div>
-          <p>
-            Hola, {usuario.firstName} {usuario.lastName} ({usuario.username})
-          </p>
-        </div>
-      ) : (
-        <p>Error al cargar la información del usuario.</p>
-      )}
-    </div>
+      <div className="capa bienvenida">
+        <img src="/LogoY.png" alt="Logo YIMEIL" className="logo-img" />
+        <h2>¡Bienvenido!</h2>
+        {cargando ? (
+            <p>Cargando información del usuario...</p>
+        ) : usuario ? (
+            <div>
+              <p>
+                Hola, {usuario.firstName} {usuario.lastName} ({usuario.username})
+              </p>
+            </div>
+        ) : (
+            <p>Error al cargar la información del usuario.</p>
+        )}
+      </div>
   );
 };
 
