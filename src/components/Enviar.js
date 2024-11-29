@@ -6,7 +6,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const token = `${authData.token}`;
   const [systemId, setSystemId] = '2';
   const from = userData.username;
-  const [to, setTo] = useState([""]);
+  const [to, setTo] = useState([]);
   const [subjet, setSubjet] = useState("");
   const [body, setBody] = useState("");
   const [attachments, setAttachments] = useState([{ filename: "", url: "" }]);
@@ -22,7 +22,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const [fileExiste, setFileExiste] = useState(false);
   const [esPublico, setEsPublico] = useState(false);
   const [error, setError] = useState("");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -81,7 +81,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
 
   const folderDrive = async () => {
     const folderPath = `/adjuntos`;
-    const draivFilesUrl = "http://poo-dev.unsada.edu.ar:8082/draiv/files";
+    const draivFilesUrl = "https://poo-dev.unsada.edu.ar:8082/draiv/files";
 
     try {
       const folderExiste = await fetch(
@@ -115,7 +115,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const uploadDraiv = async (esCarpeta) => {
     try {
       const draivUpload = await fetch(
-         "http://poo-dev.unsada.edu.ar:8082/draiv/files",
+         "https://poo-dev.unsada.edu.ar:8082/draiv/files",
         {
           method: "POST",
           headers: {
@@ -151,7 +151,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const enviarCorreo = async (event) => {
     event.preventDefault();
     setError("");
-
+    
     if (!to.length) {
       setError("El campo de destinatarios es obligatorio.");
       return;
@@ -165,22 +165,24 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
       setError("El asunto es obligatorio.");
       return;
     }
-
+    
     if (!fileExiste && !body) {
       setError(
-          "El correo no puede estar vacio, debe haber alguno de los siguientes: Archivo, Mensaje."
+        "El correo no puede estar vacio, debe haber alguno de los siguientes: Archivo, Mensaje."
       );
       return;
     }
-
+    
     if (fileExiste) {
       await folderDrive();
     }
-
+    
+    setIsSubmitting(true);
     const dataEmail = { token, systemId, from, to, subjet, body, attachments };
     handleEnviarCorreo(dataEmail);
+    setIsSubmitting(false);
   };
-
+  
   return (
       <div className="EnviarContenedor">
         <h2>Enviar Mensaje</h2>
@@ -219,8 +221,8 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
               onChange={(e) => setBody(e.target.value)}
           />
 
-          <button className="btnEnviar" type="submit">
-            Enviar
+          <button className="btnEnviar" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Enviando..." : "Enviar"}
           </button>
         </form>
         {error && <p style={{ color: "red" }}>{error}</p>}

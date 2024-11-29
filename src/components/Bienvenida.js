@@ -5,7 +5,8 @@ const Bienvenida = ({ token, userId }) => {
   const [cargando, setCargando] = useState(true);
 
   const fetchUserData = async () => {
-    const baseUrlUser = `http://poo-dev.unsada.edu.ar:8088/cuentas/API/user/${userId}`;
+    const baseUrlUser = `https://poo-dev.unsada.edu.ar:8088/cuentas/API/users/${userId}`;
+    //const baseUrlUserTest = `https://poo2024.unsada.edu.ar/cuentas/user/${userId}`;
     const params = new URLSearchParams({ token: token });
 
     try {
@@ -21,7 +22,6 @@ const Bienvenida = ({ token, userId }) => {
       }
 
       const data = await response.json();
-
 
       setUsuario(data);
     } catch (error) {
@@ -48,7 +48,7 @@ const Bienvenida = ({ token, userId }) => {
         ) : usuario ? (
             <div>
               <p>
-                Hola, {usuario.firstName} {usuario.lastName} ({usuario.username})
+                Hola, {usuario.firstName} {usuario.lastName} ({usuario.userName})
               </p>
             </div>
         ) : (
