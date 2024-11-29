@@ -12,10 +12,10 @@ const Bandeja = ({ token, seleccionarCorreo }) => {
 
   useEffect(() => {
     const fetchCorreos = async () => {
-      const baseUrlYimeilGetEmails = "http://poo-dev.unsada.edu.ar:8083/yimeil/emails";
+      const baseUrlYimeilGetEmails = "https://poo-dev.unsada.edu.ar:8083/yimeil/emails";
       try {
         const response = await fetch(
-            `${baseUrlYimeilGetEmails}?${params.toString()}`,
+            `${baseUrlYimeilGetEmails}?${params.toString()}`, 
             {
               method: "GET",
               headers: {
@@ -37,7 +37,7 @@ const Bandeja = ({ token, seleccionarCorreo }) => {
 
   const fetchDataEmail = async (correo) => {
     const emailId = correo.emailId;
-    const baseUrlYimeilGetEmails = `http://poo-dev.unsada.edu.ar:8083/yimeil/emails/${emailId}`;
+    const baseUrlYimeilGetEmails = `https://poo-dev.unsada.edu.ar:8083/yimeil/emails/${emailId}`;
     try {
       const response = await fetch(
           `${baseUrlYimeilGetEmails}?${params.toString()}`,
@@ -57,6 +57,7 @@ const Bandeja = ({ token, seleccionarCorreo }) => {
     } finally {
       setCargando(false);
     }
+    
   };
 
   const handleClick = (correo) => {
@@ -78,10 +79,10 @@ const Bandeja = ({ token, seleccionarCorreo }) => {
                   >
                     <div className="correo-remitente">{correo.from}</div>
                     <div className="correo-asunto">{correo.subject}</div>
-
                   </div>
               ))}
             </div>
+        
         )}
       </div>
   );
