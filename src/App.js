@@ -18,7 +18,8 @@ const App = () => {
 
   // Función para obtener datos del usuario
   const fetchUserData = async (idUsuario, token) => {
-    const baseUrlUser = `http://poo-dev.unsada.edu.ar:8088/cuentas/API/user/${idUsuario}`;
+    const baseUrlUser = `https://poo-dev.unsada.edu.ar:8088/cuentas/API/users/${idUsuario}`;
+    //const baseUrlUserTest = `https://poo2024.unsada.edu.ar/cuentas/user/${idUsuario}`;
     const params = new URLSearchParams({ token: token });
 
     try {
@@ -51,12 +52,12 @@ const App = () => {
   }, [correoSeleccionado]);
 
   // Función para manejar el login y establecer datos de sesión
-  const manejarToken = (data) => {
+  const manejarToken = async (data) => {
     setAuthData(data);
     setToken(data.token);
     setUserId(data.userId);
     setVistaActiva("bienvenida"); // Vista inicial tras login
-    fetchUserData(data.userId, data.token);
+    await fetchUserData(data.userId, data.token);
   };
 
   const manejarData = (data) => {
@@ -77,7 +78,8 @@ const App = () => {
 
   const handleEnviarCorreo = async (emailData) => {
     try {
-      await fetch( "http://poo-dev.unsada.edu.ar:8083/yimeil/emails", 
+      await fetch( 
+        "https://poo-dev.unsada.edu.ar:8083/yimeil/emails", 
         {
         method: "POST",
         headers: {
@@ -87,8 +89,8 @@ const App = () => {
           token: `${emailData.token}`,
           systemId: `${emailData.systemId}`,
           from: `${emailData.from}`,
-          to: `${emailData.to}`,
-          subject: `${emailData.subject}`,
+          to: emailData.to,
+          subject: `${emailData.subjet}`,
           body: `${emailData.body}`,
           attachments: emailData.attachments.map((attachment) => ({
             filename: attachment.filename,
@@ -124,7 +126,7 @@ const App = () => {
           )}
           {vistaActiva === "login" && <Login manejarToken={manejarToken} />}
           {vistaActiva === "bandeja" && token && (
-              <Bandeja token={token} seleccionarCorreo={seleccionarCorreo} />
+              <Bandeja token={token} seleccionarCorreo={seleccionarCorreo}/>
           )}
           {vistaActiva === "correo" && correoSeleccionado && (
               <Correo correo={correoSeleccionado} />
