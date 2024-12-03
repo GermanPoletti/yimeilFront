@@ -4,7 +4,7 @@
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 100%; 
+    max-width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -33,6 +33,27 @@
     padding: 0;
 }
 
+.contenedorBorrar{
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+  }
+  
+  .botonBorrar{
+    width: 12%;
+    padding: 10px;
+    font-size: 16px;
+    color: #ecf0f1;
+    background-color: #860000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;   
+  }
+
+  .botonBorrar:hover{
+    background-color: #550000;
+  }
 .correo-archivos li {
     margin-bottom: 10px;
 }

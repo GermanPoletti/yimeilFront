@@ -6,10 +6,10 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const token = `${authData.token}`;
   const [systemId, setSystemId] = '2';
   const from = userData.username;
-  const [to, setTo] = useState([""]);
+  const [to, setTo] = useState([]);
   const [subjet, setSubjet] = useState("");
   const [body, setBody] = useState("");
-  const [attachments, setAttachments] = useState({ filename: "", url: "" });
+  const [attachments, setAttachments] = useState([{ filename: "", url: "" }]);
   const [fileDetails, setFileDetails] = useState({
     fileName: "",
     fileExt: "",
@@ -22,10 +22,23 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const [fileExiste, setFileExiste] = useState(false);
   const [esPublico, setEsPublico] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result.split(",")[1]; // Eliminamos el encabezado
+        resolve(base64String);
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file); // Lee el archivo como Data URL
+    });
+  };
 
   const cambio = (event) => {
     const inputValue = event.target.value;
-    const emails = inputValue.split(",").map((email) => email.trim()); 
+    const emails = inputValue.split(",").map((email) => email.trim());
     setTo(emails);
   };
 
@@ -42,6 +55,8 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const infoFile = async (event) => {
     const file = event.target.files[0];
     if (file !== null) {
+      const base64Content = await convertToBase64(file);
+  
       setFileExiste(true);
       setFileDetails(() => ({
         fileName: file.name,
@@ -49,6 +64,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
         filePath: cleanSubject(subjet),
         mimeType: file.type,
         isPublic: false,
+        fileContent: base64Content,
       }));
     }
   };
@@ -65,17 +81,17 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
 
   const folderDrive = async () => {
     const folderPath = `/adjuntos`;
-    const draivFilesUrl = "https://poo2024.unsada.edu.ar/draiv/files";
+    const draivFilesUrl = "https://poo-dev.unsada.edu.ar:8082/draiv/files";
 
     try {
       const folderExiste = await fetch(
-        `${draivFilesUrl}?${params.toString()}&path=${folderPath}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+          `${draivFilesUrl}?${params.toString()}&path=${folderPath}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
       );
 
       if (!folderExiste.ok) {
@@ -99,7 +115,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const uploadDraiv = async (esCarpeta) => {
     try {
       const draivUpload = await fetch(
-        "https://poo2024.unsada.edu.ar/draiv/files",
+         "https://poo-dev.unsada.edu.ar:8082/draiv/files",
         {
           method: "POST",
           headers: {
@@ -113,7 +129,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
             fileExt: `${esCarpeta ? "" : fileDetails.fileExt}`,
             fileName: `${fileDetails.filename}`,
             mimeType: `${esCarpeta ? "" : fileDetails.mimeType}`,
-            content: `${esCarpeta ? "" : "content aqui"}`,
+            content: `${esCarpeta ? "" : fileDetails.content}`,
             isPublic: esPublico,
           }),
         }
@@ -135,7 +151,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const enviarCorreo = async (event) => {
     event.preventDefault();
     setError("");
-
+    
     if (!to.length) {
       setError("El campo de destinatarios es obligatorio.");
       return;
@@ -149,66 +165,68 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
       setError("El asunto es obligatorio.");
       return;
     }
-
+    
     if (!fileExiste && !body) {
       setError(
         "El correo no puede estar vacio, debe haber alguno de los siguientes: Archivo, Mensaje."
       );
       return;
     }
-
+    
     if (fileExiste) {
       await folderDrive();
     }
-
+    
+    setIsSubmitting(true);
     const dataEmail = { token, systemId, from, to, subjet, body, attachments };
     handleEnviarCorreo(dataEmail);
+    setIsSubmitting(false);
   };
-
+  
   return (
-    <div className="EnviarContenedor">
-      <h2>Enviar Mensaje</h2>
-      <form className="formEnviar" onSubmit={enviarCorreo}>
-      <input
-          className="inputEmail"
-          type="text" 
-          placeholder="Destinatarios (separados por comas):"
-          value={to.join(", ")} 
-          onChange={cambio}
-        />
+      <div className="EnviarContenedor">
+        <h2>Enviar Mensaje</h2>
+        <form className="formEnviar" onSubmit={enviarCorreo}>
+          <input
+              className="inputEmail"
+              type="text"
+              placeholder="Destinatarios (separados por comas):"
+              value={to.join(", ")}
+              onChange={cambio}
+          />
 
-        <input
-          className="inputSubjet"
-          type="text"
-          value={subjet}
-          placeholder="Asunto:"
-          onChange={(e) => setSubjet(e.target.value)}
-        />
+          <input
+              className="inputSubjet"
+              type="text"
+              value={subjet}
+              placeholder="Asunto:"
+              onChange={(e) => setSubjet(e.target.value)}
+          />
 
-        <div className="contenedorArchivo">
-          <input className="inputAttachments" type="file" onChange={infoFile} />
-          <label className="contenedorCheckbox">
-            ¿Es público?
-            <input
-              type="checkbox"
-              checked={esPublico}
-              onChange={manejarCambioCheckbox}
-            />
-          </label>
-        </div>
-        <textarea
-          className="inputBody"
-          value={body}
-          placeholder="Mensaje"
-          onChange={(e) => setBody(e.target.value)}
-        />
+          <div className="contenedorArchivo">
+            <input className="inputAttachments" type="file" onChange={infoFile} />
+            <label className="contenedorCheckbox">
+              ¿Es público?
+              <input
+                  type="checkbox"
+                  checked={esPublico}
+                  onChange={manejarCambioCheckbox}
+              />
+            </label>
+          </div>
+          <textarea
+              className="inputBody"
+              value={body}
+              placeholder="Mensaje"
+              onChange={(e) => setBody(e.target.value)}
+          />
 
-        <button className="btnEnviar" type="submit">
-          Enviar
-        </button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+          <button className="btnEnviar" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Enviando..." : "Enviar"}
+          </button>
+        </form>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </div>
   );
 };
 

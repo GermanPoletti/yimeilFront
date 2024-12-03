@@ -1,21 +1,21 @@
 .EnviarContenedor{
-  
+
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
     justify-content: center;
-    height: auto; 
+    height: auto;
     background-color: #f0f4f8;
     font-family: 'Arial', sans-serif;
     padding: 30px;
     border: 2px solid #ccc;
-    border-radius: 10px; 
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    margin: 0 auto; 
-    box-sizing: border-box; 
-  
+    margin: 0 auto;
+    box-sizing: border-box;
+
 }
 
 .formEnviar {
@@ -29,26 +29,26 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
-  }
-  
-  .inputEmail,
-  .inputSubjet,
-  .inputAttachments,
-  .inputBody {
+}
+
+.inputEmail,
+.inputSubjet,
+.inputAttachments,
+.inputBody {
     width: 100%;
     margin-bottom: 15px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-  }
-  
-  .inputBody {
+}
+
+.inputBody {
     height: 100px;
     resize: none;
-  }
-  
-  .btnEnviar {
+}
+
+.btnEnviar {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -56,23 +56,23 @@
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .btnEnviar:hover {
-    background-color: #45a049;
-  }
+}
 
-  .contenedorArchivo{
+.btnEnviar:hover {
+    background-color: #45a049;
+}
+
+.contenedorArchivo{
     display: flex;
     flex-direction: row;
     width: 100%;
     gap: 10px;
-  }
+}
 
-  .contenedorCheckbox{
+.contenedorCheckbox{
     display: flex;
     flex-direction: column;
     gap: 10px;
     white-space: nowrap;
-  }
+}
   
