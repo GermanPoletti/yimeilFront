@@ -2,15 +2,29 @@ import React, { useEffect, useState } from "react";
 import './Login.css';
 
 
-const Login = ({ manejarToken }) => {
+const Login = ({ manejarToken, cerrarSesion }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
     useEffect(() => {
+        console.log("me ejecute en login")
         const dataGuardada = JSON.parse(localStorage.getItem('data'));
-        if (dataGuardada) {
-            manejarToken(dataGuardada);
+        const storedLoginTime = localStorage.getItem("horaInicio");
+        if (dataGuardada && storedLoginTime) {
+            const horaLogin = new Date(storedLoginTime)
+            const horaActual = new Date();
+
+            const diferenciaHoras = Math.floor((horaActual - horaLogin) / 1000);
+            console.log("tiempo restante para expiracion: " +  (dataGuardada.expiresIn - diferenciaHoras));
+            if(diferenciaHoras < dataGuardada.expiresIn){
+                manejarToken(dataGuardada);
+            }else{
+                localStorage.removeItem('data');
+                localStorage.removeItem('horaInicio');
+                console.log("El token ha expirado.");
+                cerrarSesion();
+            }
         }
     }, [manejarToken]);
 
@@ -41,6 +55,8 @@ const Login = ({ manejarToken }) => {
             const data = await response.json();
 
             localStorage.setItem('data', JSON.stringify(data));
+            const loginTime = new Date().toISOString();
+            localStorage.setItem('horaInicio', loginTime);
             manejarToken(data);
 
             // Convertir expiresIn a milisegundos y establecer un temporizador
