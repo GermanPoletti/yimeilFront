@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import "./Bienvenida.css";
 const Bienvenida = ({ token, userId }) => {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -42,13 +42,13 @@ const Bienvenida = ({ token, userId }) => {
   return (
       <div className="capa bienvenida">
         <img src="/LogoY.png" alt="Logo YIMEIL" className="logo-img" />
-        <h2>¡Bienvenido!</h2>
+        <h2>¡Bienvenido/a!</h2>
         {cargando ? (
             <p>Cargando información del usuario...</p>
         ) : usuario ? (
             <div>
               <p>
-                Hola, {usuario.firstName} {usuario.lastName} ({usuario.userName})
+                Hola, {usuario.firstName} {usuario.lastName} 
               </p>
             </div>
         ) : (
