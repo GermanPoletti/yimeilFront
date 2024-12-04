@@ -15,7 +15,7 @@ const Correo = ({ correo, cambiarVista }) => {
             return;
         }
         try {
-             const rta = await fetch(`https://poo-dev.unsada.edu.ar/yimeil/emails/${emailId}`,
+             const rta = await fetch(`https://poo-dev.unsada.edu.ar:8083/yimeil/emails/${emailId}`,
                  {
                      method: 'DELETE',
                      headers: {
