@@ -204,7 +204,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
           />
 
           <div className="contenedorArchivo">
-            <input className="inputAttachments" type="file" onChange={infoFile} />
+            <input className="inputAttachments" type="file" onChange={infoFile}/>
             <label className="contenedorCheckbox">
               ¿Es público?
               <input
