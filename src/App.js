@@ -67,7 +67,7 @@ const App = () => {
   // Función para cerrar sesión
   const cerrarSesion = () => {
     setToken(null);
-    localStorage.setItem("data", null);
+    localStorage.removeItem("data");
     setVistaActiva("login");
   };
 
@@ -124,12 +124,12 @@ const App = () => {
                   cambiarVista={cambiarVista} // Pasamos la función para cambiar vistas
               />
           )}
-          {vistaActiva === "login" && <Login manejarToken={manejarToken} />}
+          {vistaActiva === "login" && <Login manejarToken={manejarToken} cerrarSesion={cerrarSesion} />}
           {vistaActiva === "bandeja" && token && (
-              <Bandeja token={token} seleccionarCorreo={seleccionarCorreo}/>
+              <Bandeja token={token} seleccionarCorreo={seleccionarCorreo} userEmail={userData.userName}/>
           )}
           {vistaActiva === "correo" && correoSeleccionado && (
-              <Correo correo={correoSeleccionado} />
+              <Correo correo={correoSeleccionado} cambiarVista = {cambiarVista} />
           )}
           {vistaActiva === "enviar" && token && (
               <Enviar

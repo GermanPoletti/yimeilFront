@@ -22,6 +22,7 @@ h2 {
     color: #333;
     margin-bottom: 20px;
     font-weight: bold;
+    text-align: center;
 }
 
 .loginInput {
@@ -56,7 +57,7 @@ h2 {
 }
 
 .loginBtn:hover {
-    background-color: #0056b3;
+    background-color: #488ad1;
 }
 
 .error-message {
@@ -65,4 +66,22 @@ h2 {
     margin-top: 10px;
     text-align: center;
 }
-  
+/*n*/
+@media (max-width: 768px) {
+    .capa {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .loginInput, .loginBtn {
+        font-size: 14px;
+        height: 35px;
+    }
+
+    .loginBtn {
+        font-size: 16px;
+    }
+}

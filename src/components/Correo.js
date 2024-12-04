@@ -1,28 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Correo.css"; // Añadido archivo CSS para los estilos
 
-const Correo = ({ correo }) => {
+const Correo = ({ correo, cambiarVista }) => {
     const emailId = correo.emailId;
-    console.log(correo.attachments[0].url);
+    const [mensaje, setMensaje] = useState("");
+    const [clickedTwice, setClickedTwice] = useState(false);
     if (!correo) {
         return <div>Seleccione un correo para ver los detalles.</div>;
     }
-
+    
     const borrarMsj = async () =>{
-
-        try {
-            const rta = await fetch(`https://poo-dev.unsada.edu.ar/yimeil/emails/${emailId}`,
-                {
-                    method: 'DELETE',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                },
-            );
-        } catch (error) {
-            
+        if(!clickedTwice){
+            setClickedTwice(true);
+            return;
         }
-
+        try {
+            // const rta = await fetch(`https://poo-dev.unsada.edu.ar/yimeil/emails/${emailId}`,
+            //     {
+            //         method: 'DELETE',
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         },
+            //     },
+            // )
+            // if(!rta.ok){
+            //     throw new Error("Error borrando el correo");
+            // }
+            setMensaje("Correo Eliminado Exitosamente")
+            setClickedTwice(false);
+            setTimeout(() => {
+                cambiarVista("bandeja")
+            }, 1500);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 
@@ -43,7 +54,7 @@ const Correo = ({ correo }) => {
             </div>
 
             {/* Archivos adjuntos */}
-            {correo.attachments ? (
+            {correo.attachments && correo.attachments.length > 0  ? (
                 <div className="correo-campo">
                     <strong>Archivos adjuntos:</strong>
                     <ul>
@@ -64,8 +75,8 @@ const Correo = ({ correo }) => {
                 <strong>Fecha:</strong> <span>{new Date(correo.receivedAt).toLocaleString()}</span>
             </div>
         </div>
-            <div className="contenedorBorrar"><button className="botonBorrar" onClick={borrarMsj}>Borrar</button></div>
-            {/* <div>{mensaje}</div> */}
+            <div className="contenedorBorrar"><button className="botonBorrar" onClick={borrarMsj}>{clickedTwice ? "Confirmar" : "Borrar"}</button></div>
+            <div>{mensaje}</div>
         </div>
     );
 };

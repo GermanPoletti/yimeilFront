@@ -1,6 +1,8 @@
 .bandeja {
   padding: 20px;
   background-color: #f4f7f6;
+  max-width: 1200px; 
+  margin: 0 auto; 
 }
 
 .correos-lista {
@@ -37,5 +39,20 @@
   color: #202124;
   flex: 4;
 }
-  
-  
+
+@media (max-width: 768px) {
+  .correo-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .correo-remitente,
+  .correo-asunto {
+    font-size: 12px; 
+    flex: none;
+    width: 100%; 
+  }
+}
+
+

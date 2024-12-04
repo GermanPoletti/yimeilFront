@@ -75,4 +75,52 @@
     gap: 10px;
     white-space: nowrap;
 }
-  
+/*n*/
+@media (max-width: 768px) {
+    .formEnviar {
+        width: 90%;
+        padding: 15px; 
+    }
+
+    .inputEmail,
+    .inputSubjet,
+    .inputAttachments,
+    .inputBody {
+        font-size: 14px;
+    }
+
+    .contenedorArchivo {
+        flex-direction: column; 
+        gap: 15px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .EnviarContenedor {
+        padding: 20px; 
+    }
+
+    .formEnviar {
+        width: 100%; 
+        padding: 10px; 
+    }
+
+    .inputEmail,
+    .inputSubjet,
+    .inputAttachments,
+    .inputBody {
+        font-size: 12px;
+        padding: 8px; 
+    }
+
+    .contenedorCheckbox {
+        flex-direction: row;
+        gap: 5px; 
+        flex-wrap: wrap; 
+    }
+
+    .btnEnviar {
+        font-size: 14px; 
+        padding: 8px 15px;
+    }
+}
