@@ -15,17 +15,17 @@ const Correo = ({ correo, cambiarVista }) => {
             return;
         }
         try {
-            // const rta = await fetch(`https://poo-dev.unsada.edu.ar/yimeil/emails/${emailId}`,
-            //     {
-            //         method: 'DELETE',
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //     },
-            // )
-            // if(!rta.ok){
-            //     throw new Error("Error borrando el correo");
-            // }
+             const rta = await fetch(`https://poo-dev.unsada.edu.ar/yimeil/emails/${emailId}`,
+                 {
+                     method: 'DELETE',
+                     headers: {
+                         "Content-Type": "application/json",
+                     },
+                 },
+             )
+             if(!rta.ok){
+                 throw new Error("Error borrando el correo");
+             }
             setMensaje("Correo Eliminado Exitosamente")
             setClickedTwice(false);
             setTimeout(() => {

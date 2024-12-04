@@ -48,7 +48,7 @@ const Bienvenida = ({ token, userId }) => {
         ) : usuario ? (
             <div>
               <p>
-                Hola, {usuario.firstName} {usuario.lastName} 
+                Hola, {usuario.firstName} {usuario.lastName} ({usuario.userName})
               </p>
             </div>
         ) : (
