@@ -5,7 +5,7 @@ import "./Enviar.css";
 const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const token = `${authData.token}`;
   const [systemId, setSystemId] = '2';
-  const from = userData.username;
+  const from = userData.userName;
   const [to, setTo] = useState([]);
   const [subjet, setSubjet] = useState("");
   const [body, setBody] = useState("");
