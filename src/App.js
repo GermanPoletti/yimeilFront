@@ -76,6 +76,7 @@ const App = () => {
     setVistaActiva(vista);
   };
 
+
   const handleEnviarCorreo = async (emailData) => {
     try {
       await fetch( 
@@ -92,7 +93,7 @@ const App = () => {
           to: emailData.to,
           subject: `${emailData.subjet}`,
           body: `${emailData.body}`,
-          attachments: emailData.attachments.map((attachment) => ({
+          attachments: emailData.updatedAttachments.map((attachment) => ({
             filename: attachment.filename,
             url: attachment.url,
           })),

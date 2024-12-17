@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Enviar.css";
 
 
@@ -9,7 +9,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const [to, setTo] = useState([]);
   const [subjet, setSubjet] = useState("");
   const [body, setBody] = useState("");
-  const [attachments, setAttachments] = useState([{ filename: "", url: "" }]);
+  const [attachments, setAttachments] = useState([]);
   const [fileDetails, setFileDetails] = useState({
     fileName: "",
     fileExt: "",
@@ -18,6 +18,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
     content: "",
     isPublic: false,
   });
+  let storedFileURL;
   const [driveFolders, setDriveFolders] = useState([]);
   const [fileExiste, setFileExiste] = useState(false);
   const [esPublico, setEsPublico] = useState(false);
@@ -56,7 +57,6 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
     const file = event.target.files[0];
     if (file !== null) {
       const base64Content = await convertToBase64(file);
-  
       setFileExiste(true);
       setFileDetails(() => ({
         fileName: file.name,
@@ -64,11 +64,20 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
         filePath: cleanSubject(subjet),
         mimeType: file.type,
         isPublic: false,
-        fileContent: base64Content,
+        content: base64Content,
       }));
     }
   };
 
+  const updateAttachments = (attachment) => {
+    return new Promise((resolve) => {
+      const newAttachments = [attachment]; // Creamos el valor actualizado
+      setAttachments(newAttachments);
+      resolve(newAttachments); // Retornamos el nuevo valor
+    });
+  };
+  
+  
   //limpia el asunto borrando espacios y caracteres especiales
   const cleanSubject = (subject) => {
     return subject.replace(/[^a-zA-Z0-9]/g, "").replace(/\s+/g, "");
@@ -77,12 +86,16 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
   const params = new URLSearchParams({
     token: token,
     systemId: systemId,
+    userId: authData.userId
   });
 
   const folderDrive = async () => {
     const folderPath = `/adjuntos`;
     const draivFilesUrl = "https://poo-dev.unsada.edu.ar:8082/draiv/files";
 
+
+    /* En esta parte se obtiene el listado de todas las carpetas que hayan, a fin de verificar si ya 
+    existe una con el nombre del subject */
     try {
       const folderExiste = await fetch(
           `${draivFilesUrl}?${params.toString()}&path=${folderPath}`,
@@ -124,10 +137,11 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
           body: JSON.stringify({
             token: token,
             systemId: systemId,
+            userId: authData.userId,
             isFolder: esCarpeta,
-            filePath: `/adjuntos/${cleanSubject(subjet)}`,
+            filePath: `${esCarpeta ? "/adjuntos" : `/adjuntos/${cleanSubject(subjet)}`}`,
             fileExt: `${esCarpeta ? "" : fileDetails.fileExt}`,
-            fileName: `${fileDetails.filename}`,
+            fileName: `${esCarpeta ? cleanSubject(subjet) : fileDetails.fileName}`,
             mimeType: `${esCarpeta ? "" : fileDetails.mimeType}`,
             content: `${esCarpeta ? "" : fileDetails.content}`,
             isPublic: esPublico,
@@ -138,10 +152,10 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
         throw new Error("error");
       }
       const uploadedFileInfo = await draivUpload.json();
-      setAttachments({
-        filename: fileDetails.fileName,
-        url: uploadedFileInfo.url,
-      });
+
+      if(!esCarpeta){
+        storedFileURL = uploadedFileInfo.fileURL
+      }
 
     } catch (error) {
       console.error("error:" , error)
@@ -150,12 +164,14 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
 
   const enviarCorreo = async (event) => {
     event.preventDefault();
+    
     setError("");
     
     if (!to.length) {
       setError("El campo de destinatarios es obligatorio.");
       return;
     }
+
     const invalidEmails = to.filter((email) => !isValidEmail(email));
     if (invalidEmails.length) {
       setError(`Los siguientes correos no son válidos: ${invalidEmails.join(", ")} \"(emailExample@gugle.com)\"`);
@@ -172,17 +188,26 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
       );
       return;
     }
-    
+    setIsSubmitting(true);
+    let updatedAttachments = [];
     if (fileExiste) {
       await folderDrive();
+      updatedAttachments = await updateAttachments({
+        filename: fileDetails.fileName,
+        url: storedFileURL, 
+      });
     }
     
-    setIsSubmitting(true);
-    const dataEmail = { token, systemId, from, to, subjet, body, attachments };
-    handleEnviarCorreo(dataEmail);
-    setIsSubmitting(false);
+
+    
+    const dataEmail = { token, systemId, from, to, subjet, body, updatedAttachments };
+    await handleEnviarCorreo(dataEmail);
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 5000);
   };
   
+ 
   return (
       <div className="EnviarContenedor">
         <h2>Enviar Mensaje</h2>
