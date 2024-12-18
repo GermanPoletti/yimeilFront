@@ -55,6 +55,12 @@
     background-color: #550000;
 }
 
+.botonBorrar:disabled {
+    background-color: #cccccc; /* Color gris cuando está deshabilitado */
+    color: #666666; /* Texto gris */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+}
+
 .correo-archivos li {
     margin-bottom: 10px;
 }

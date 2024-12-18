@@ -62,6 +62,13 @@
     background-color: #45a049;
 }
 
+.btnEnviar:disabled {
+    background-color: #cccccc; /* Color gris cuando está deshabilitado */
+    color: #666666; /* Texto gris */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+}
+
+
 .contenedorArchivo{
     display: flex;
     flex-direction: row;
