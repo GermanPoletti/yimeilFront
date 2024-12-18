@@ -72,21 +72,31 @@ const Bandeja = ({ token, seleccionarCorreo, userEmail }) => {
         <div className="correos-lista">
           {correos
             .filter((correo) =>
-              correo.to.some(
-                (destinatario) => destinatario === userEmail
-              )
+              correo.to.some((destinatario) => destinatario === userEmail)
             )
-            .map((correo) => (
-              <div
-                key={correo.emailId}
-                className="correo-item"
-                onClick={() => handleClick(correo)}
-              >
-                <div className="correo-remitente">{correo.from}</div>
-                <div className="correo-asunto">{correo.subject}</div>
-                <div className="correo-fecha">{new Date(correo.receivedAt).toLocaleString()}</div>
-              </div>
-            ))}
+            .sort((a, b) => new Date(b.receivedAt) - new Date(a.receivedAt)) // Ordena de más reciente a más antiguo
+            .length === 0 ? (
+            <p className="bandeja-vacia">Bandeja de entrada vacía</p>
+          ) : (
+            correos
+              .filter((correo) =>
+                correo.to.some((destinatario) => destinatario === userEmail)
+              )
+              .sort((a, b) => new Date(b.receivedAt) - new Date(a.receivedAt)) // Ordena de más reciente a más antiguo
+              .map((correo) => (
+                <div
+                  key={correo.emailId}
+                  className="correo-item"
+                  onClick={() => handleClick(correo)}
+                >
+                  <div className="correo-remitente">{correo.from}</div>
+                  <div className="correo-asunto">{correo.subject}</div>
+                  <div className="correo-fecha">
+                    {new Date(correo.receivedAt).toLocaleString()}
+                  </div>
+                </div>
+              ))
+          )}
         </div>
       )}
     </div>
