@@ -7,6 +7,8 @@ import Bienvenida from "./components/Bienvenida";
 import Correo from "./components/Correo";
 import "./App.css";
 
+//si alguien en 2025 ve esto para tomarnos de ejemplo quiero pedir perdon por el desastre que es este codigo
+
 const App = () => {
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);

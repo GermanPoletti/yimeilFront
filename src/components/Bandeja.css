@@ -55,4 +55,10 @@
   }
 }
 
-
+.bandeja-vacia {
+  color: #888;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}

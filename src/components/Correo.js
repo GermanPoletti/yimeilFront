@@ -5,16 +5,17 @@ const Correo = ({ correo, cambiarVista }) => {
   const emailId = correo.emailId;
   const [mensaje, setMensaje] = useState("");
   const [clickedTwice, setClickedTwice] = useState(false);
+  const [borrando, setBorrando] = useState(false);
   if (!correo) {
     return <div>Seleccione un correo para ver los detalles.</div>;
   }
-  let borrando;
+  
   const borrarMsj = async () => {
     if (!clickedTwice) {
       setClickedTwice(true);
       return;
     }
-    borrando = true;
+    setBorrando(true);
     try {
       const rta = await fetch(
         `https://poo-dev.unsada.edu.ar:8083/yimeil/emails/${emailId}`,
