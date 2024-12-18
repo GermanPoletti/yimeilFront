@@ -202,9 +202,9 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
     
     const dataEmail = { token, systemId, from, to, subjet, body, updatedAttachments };
     await handleEnviarCorreo(dataEmail);
-    setTimeout(() => {
-      setIsSubmitting(false);
-    }, 5000);
+    // setTimeout(() => {
+    //   setIsSubmitting(false);
+    // }, 5000);
   };
   
  
@@ -247,7 +247,7 @@ const Enviar = ({ handleEnviarCorreo, authData, userData }) => {
           />
 
           <button className="btnEnviar" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Enviando..." : "Enviar"}
+          Enviar
           </button>
         </form>
         {error && <p style={{ color: "red" }}>{error}</p>}
